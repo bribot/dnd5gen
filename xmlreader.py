@@ -34,12 +34,14 @@ def init():
         #print(name)
         classes.append(name)
 
+# ---------------------------------------------------
 def genCharacter(race="",cclass="",lvl=1):
     if race=="":
         race=races[randint(0,len(races)-1)]
     if cclass=="":
         cclass=classes[randint(0,len(classes)-1)]
     print("Behold the %s %s!" % (race,cclass))
+# ---------------------------------------------------
     
 def getRace(race):
     result={"name":race,
@@ -66,7 +68,34 @@ def getRace(race):
     result["ability"]=item.firstChild.data
     
     return result
+
+def getClass(cclass):
+    result={"name":cclass,
+            "hd":"",
+            "proficiency":"",
+            "spellAbility":""}
+    if cclass=="":
+        print("no valid class")
+        return result
     
+    node = mydoc.getElementsByTagName('class')
+    for subnode in node:
+        if subnode.getElementsByTagName('name')[0].firstChild.data == cclass:
+            node=subnode
+            break
+    
+    item=node.getElementsByTagName("hd")[0]
+    result["hd"]=item.firstChild.data
+    
+    item=node.getElementsByTagName("proficiency")[0]
+    result["proficiency"]=item.firstChild.data
+    try:
+        item=node.getElementsByTagName("spellAbility")[0]
+        result["spellAbility"]=item.firstChild.data
+    except:
+        result["spellAbility"]=""
+    
+    return result
 
 def findTextNodes(nodeList):
     noprint=["text","name"]
@@ -114,6 +143,7 @@ def listInfo(search):
             items=mydoc.getElementsByTagName("class")
     if items=="":
         print("no info in database")
+        result=[""]
         return result
     for item in items:
         name=item.getElementsByTagName("name")[0].firstChild.data
@@ -125,9 +155,14 @@ def listInfo(search):
 
 def main():    
     init()
-    selection=listInfo("dwarf")
-    print(getRace(selection[0]))
-    
+    # Basic Selection
+#    selection=listInfo("dwarf")
+#    print(getRace(selection[0]))
+#    selection=listInfo("barbarian")
+#    print(getClass(selection[0]))
+    for cclass in classes:
+        selection=listInfo(cclass)
+        print(getClass(selection[0]))
 
     
 
