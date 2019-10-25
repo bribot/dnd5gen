@@ -7,10 +7,20 @@ This is a temporary script file.
 
 from xml.dom import minidom
 from random import randint
+import random
 
 races = []
 classes = []
 banlist = [] 
+pStats={
+        "STR":"",
+        "DEX":"",
+        "CON":"",
+        "INT":"",
+        "WIS":"",
+        "CHA":""
+        }
+
 
 # parse an xml file by name
 mydoc = minidom.parse('./compendium/Character Compendium 3.1.0.xml')
@@ -153,14 +163,81 @@ def listInfo(search):
             print(name)
     return result
 
+# TODO: OPTIONS TO ROLL
+def genStats(diceS=6,diceR=4,diceK=3):
+    stats=[]
+    rolls=[]
+    for i in range(len(pStats)):
+        roll=[]
+        stat=0
+        for j in range(diceR):
+            roll.append(random.randint(1,diceS))
+        roll.sort(reverse=1)
+        rolls.append(roll)
+        
+        stat = sum(roll[0:diceK])
+        
+#        for j in range(diceK):
+#            stat+=roll[j]
+        stats.append(stat)
+        
+    return stats,rolls
+
+#def sortStats(oStats,npcConf):
+#    newStats=[]
+#    for i in npcConf:
+#        newStats.append(0)
+#    tmpStats=oStats.copy()
+#    tmpStats.sort(reverse=1)
+#    priority=1
+#    while priority<=len(npcConf):
+#        for current in range(len(npcConf)):
+#            if npcConf[current][0]==priority:
+#                if tmpStats[priority-1]!=0:
+#                    newStats[current]=tmpStats[priority-1]+npcConf[current][1]
+#                    tmpStats[priority-1]=0
+#        priority+=1
+#    for s in range(len(newStats)):
+#        while newStats[s]==0:
+#            r = random.randint(0,len(npcConf)-1)
+#            newStats[s]=tmpStats[r]
+#            tmpStats[r]=0
+#    return newStats
+
+def sortStats(stats,cclass):
+    proficiency=[]
+    bestStats=[]
+    for p in cclass["proficiency"].split():
+        proficiency.append(p[0:3].lower())
+    stats.sort()
+    for p in proficiency:
+        bestStats.append(stats.pop(-1))
+        
+    random.shuffle(bestStats)
+    random.shuffle(stats)
+    
+    for stat in pStats:
+        print(stat)
+        if stat.lower() in proficiency:
+            print("*")
+            pStats[stat]=bestStats.pop(-1)
+        else:
+            pStats[stat]=stats.pop(-1)
+            
+
 def main():    
     init()
     # Basic Selection
-    selection=listInfo("dwarf")
-    print(getRace(selection[0]))
-    selection=listInfo("Rogue")
+#    selection=listInfo("Elf")
+#    print(getRace(selection[0]))
+    selection=listInfo("rogue")
     npcC = getClass(selection[0])
     print(npcC)
+    s=[10,11,12,13,14,15]
+    sortStats(s,npcC)
+    print(pStats)
+#    print(genStats())
+#    print(classes)
     
 
     
