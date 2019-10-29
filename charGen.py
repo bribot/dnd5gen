@@ -192,8 +192,11 @@ class generator():
             if search in race:
                 items=self.mydoc.getElementsByTagName("race")
         for cclass in self.classes:
-            if search in self.classes:
+            if search in cclass:
                 items=self.mydoc.getElementsByTagName("class")
+        for background in self.backgrounds:
+            if search in background:
+                items=self.mydoc.getElementsByTagName("background")
         if items=="":
             print("no info in database")
             result=[""]
@@ -201,7 +204,7 @@ class generator():
         for item in items:
             name=item.getElementsByTagName("name")[0].firstChild.data
             namel=name.lower()
-            if namel.startswith(search):
+            if search in namel:
                 result.append(name)
                 print(name)
         return result
