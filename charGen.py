@@ -9,14 +9,21 @@ from xml.dom import minidom
 from random import randint
 import random
 
+def testScript():
+    vat = generator()
+    for i in vat.classes:
+        vat.generate(race="Orc",cclass=i)
+
 class generator():
-    def __init__(self):
+    def __init__(self,banraces=[],banclasses=[],banbg=[]):
         # parse an xml file by name
         self.mydoc = minidom.parse('./compendium/Character Compendium 3.1.0.xml')
         self.races = []
         self.classes = []
         self.backgrounds= []
-        self.banlist = [] 
+        self.banraces = banraces
+        self.banclasses = banclasses
+        self.banbg = banbg
         #-------------------------
         self.pRace=""
         self.pClass=""
@@ -37,33 +44,41 @@ class generator():
         for item in items:
             name=item.getElementsByTagName("name")[0]
             name=name.firstChild.data
-            name=name.lower()
             #print(name)
-            self.races.append(name)
+            if name not in self.banraces:
+                name=name.lower()
+                self.races.append(name)
+            else:
+                print(name + " banned!")
             
         items = self.mydoc.getElementsByTagName('class')
         for item in items:
             name=item.getElementsByTagName("name")[0]
             name=name.firstChild.data
-            name=name.lower()
-            #print(name)
-            self.classes.append(name)
+            if name not in self.banclasses:
+                name=name.lower()
+                self.classes.append(name)
+            else:
+                print(name + " banned!")
             
         items = self.mydoc.getElementsByTagName('background')
         for item in items:
             name=item.getElementsByTagName("name")[0]
             name=name.firstChild.data
-            name=name.lower()
-            #print(name)
-            self.backgrounds.append(name)
+            if name not in self.banbg:
+                name=name.lower()
+                self.backgrounds.append(name)
+            else:
+                print(name + " banned!")
     
     # ---------------------------------------------------
-    def genCharacter(self,race="",cclass="",lvl=1):
-        if race=="":
-            race=self.races[randint(0,len(self.races)-1)]
-        if cclass=="":
-            cclass=self.classes[randint(0,len(self.classes)-1)]
-        print("Behold the %s %s!" % (race,cclass))
+    # TODO: EITHER DELETE OR MAKE IT RIGHT
+#    def genCharacter(self,race="",cclass="",lvl=1):
+#        if race=="":
+#            race=self.races[randint(0,len(self.races)-1)]
+#        if cclass=="":
+#            cclass=self.classes[randint(0,len(self.classes)-1)]
+#        print("Behold the %s %s!" % (race,cclass))
     # ---------------------------------------------------
         
     def getRace(self,race):
@@ -154,9 +169,8 @@ class generator():
             elif subnode.nodeType == subnode.TEXT_NODE:
                 if("\t" not in subnode.data):
                     #print("text node: ")
-                    
                     print(subnode.data)
-    
+    #TODO: RETURN INFO AS A STR 
     def searchInfo(self,search):
         items=""
         search=search.lower()
@@ -175,7 +189,8 @@ class generator():
         
         if items=="":
             print("no info in database")
-            return
+            return "no info in database"
+        
         for item in items:
             name=item.getElementsByTagName("name")[0].firstChild.data
             name=name.lower()
@@ -186,27 +201,33 @@ class generator():
     
     def listInfo(self,search):
         result=[]
-        items=""
+        items=[]
         search=search.lower()
         for race in self.races:
             if search in race:
-                items=self.mydoc.getElementsByTagName("race")
+                items.append(self.mydoc.getElementsByTagName("race"))
+                break
         for cclass in self.classes:
             if search in cclass:
-                items=self.mydoc.getElementsByTagName("class")
+                items.append(self.mydoc.getElementsByTagName("class"))
+                break
         for background in self.backgrounds:
             if search in background:
-                items=self.mydoc.getElementsByTagName("background")
+                items.append(self.mydoc.getElementsByTagName("background"))
+                break
         if items=="":
             print("no info in database")
             result=[""]
             return result
-        for item in items:
-            name=item.getElementsByTagName("name")[0].firstChild.data
-            namel=name.lower()
-            if search in namel:
-                result.append(name)
-                print(name)
+        for itemS in items:
+            for item in itemS:
+#                print("......................")
+#                print(item)
+                name=item.getElementsByTagName("name")[0].firstChild.data
+                namel=name.lower()
+                if search in namel:
+                    result.append(name)
+                    print(name)
         return result
     
     # TODO: OPTIONS TO ROLL
@@ -250,8 +271,10 @@ class generator():
                 self.pStats[stat]=stats.pop(-1)
                 
     def racialFeatures(self,race):
-        mods = race["ability"].split(",")
         ability={}
+        mods = race["ability"].split(",")
+        if len(mods)<2:
+            mods=[]
         
         for mod in mods:
             temp=mod.split()
@@ -272,18 +295,36 @@ class generator():
         return hp
         
         
-    
-    def generate(self,race,cclass):
-        selection = self.listInfo(cclass)
-        npcC = self.getClass(selection[0])
-        self.pClass = selection[0]
-        #-------------------------
-        print(npcC)
-        #-------------------------
+    # TODO: USER INTERFACE
+    # race should be a valid race
+    # cclass should be a valid class
+    def generate(self,race="",cclass=""):
+        
+        if race == "":
+            race = self.races[random.randint(0,len(self.races)-1)]
+            race=self.listInfo(race)[0]
+            print("random race: "+race)
+            
+        if cclass == "":
+            cclass = self.classes[random.randint(0,len(self.classes)-1)]
+            cclass=self.listInfo(cclass)[0]
+            print("random class: "+cclass)
+        race = self.listInfo(race)[0]
+        cclass = self.listInfo(cclass)[0]
+        print(race + ", " + cclass)
+        # Changed for the user interface seccion
+        #selection = self.listInfo(cclass)
+        npcC = self.getClass(cclass)
+        self.pClass = cclass
         s = self.genStats()[0]
         self.sortStats(s,npcC)
-        selection = self.listInfo(race)
-        npcR = self.getRace(selection[0])
+        #selection = self.listInfo(race)
+        npcR = self.getRace(race)
+         #-------------------------
+        print(npcC)
+        #-------------------------
+        print(npcR)
+        #-------------------------
         self.racialFeatures(npcR)
         for s in self.pStats:
             print(s + ":"+ str(self.pStats[s]))
@@ -298,15 +339,18 @@ class generator():
 
 class character():
     def __init__(self):
-        self.race=""
-        self.cclass=""
-        self.HP=0
-        self.Stats={
+        self.name=""
+        self.pRace=""
+        self.pClass=""
+        self.pBackground=""
+        self.pHP=0
+        self.pDC=0
+        self.pSpeed=0
+        self.pStats={
                 "STR":"",
                 "DEX":"",
                 "CON":"",
                 "INT":"",
                 "WIS":"",
-                "CHA":""}
-        self.DC=0
-        self.speed=0
+                "CHA":""
+                }
