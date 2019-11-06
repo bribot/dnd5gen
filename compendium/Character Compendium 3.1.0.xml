@@ -14,7 +14,7 @@
 			<text>You are proficient with your unarmed strikes, which deal 1d4 slashing damage on a hit.</text>
 		</trait>
 		<trait>
-			<name>Language</name>
+			<name>Languages</name>
 			<text>You can speak, read, and write Common, Aarakocra, and Auran.</text>
 		</trait>
 	</race>
@@ -5123,7 +5123,7 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 	</background>
 	<background>
 	<name>Haunted One</name>
-	<proficiency />
+	<proficiency> </proficiency>
 	<trait>
 		<name>Feature: Harrowing Event</name>
 		<text>Prior to becoming an adventurer, your path in life was defined by one dark moment, one fateful decision, or one tragedy. Now you feel a darkness threatening to consume you, and you fear there may be no hope of escape. Choose a harrowing event that haunts you, or roll 1d10.</text>
