@@ -6,7 +6,7 @@ This is a temporary script file.
 """
 
 from xml.dom import minidom
-from random import randint
+#from random import randint
 import random
 import math
 
@@ -20,6 +20,26 @@ def testScript():
         for c in vat.classes:
             for b in vat.backgrounds:
                 vat.generate(race=r,cclass=c,bg=b)
+                
+def interface(search):
+    r = ""
+    c = ""
+    b = ""
+    vat = generator()
+    for s in search.split(","):
+        ty = vat.getType(s)
+        if ty == 0:
+            r = s
+        elif ty == 1:
+            c = s
+        elif ty == 2:
+            b = s
+        else:
+            print("Something went wrong")
+    res = vat.generate(race=r,cclass=c,bg=b)
+    
+    print(res)
+    return 
     
 
 class generator():
@@ -88,6 +108,34 @@ class generator():
 #            cclass=self.classes[randint(0,len(self.classes)-1)]
 #        print("Behold the %s %s!" % (race,cclass))
     # ---------------------------------------------------
+    
+    def getType(self,search):
+        """    
+        ty = 0 Race
+        ty = 1 Class
+        ty = 2 Background
+        ty = 3 more than one element
+        ty = 4 error 
+    """
+        search = search.lower()
+        ty = 4
+        if search in self.races:
+            ty = 0
+        elif search in self.classes:
+            ty = 1
+        elif search in self.backgrounds:
+            ty = 2
+        else:
+            for i in self.races:
+                if search == i:
+                    return 0
+            for i in self.classes:
+                if search == i:
+                    return 1
+            for i in self.backgrounds:
+                if search == i:
+                    return 2
+        return ty
         
     def getRace(self,race):
         result={"name":race,
@@ -219,21 +267,21 @@ class generator():
                 self.findTextNodes(item.childNodes)
         return
     
-    def listInfo(self,search,searchType):
+    def listInfo(self,search,searchType=4):
         result=[]
         items=[]
         search=search.lower()
-        if searchType == TYPE_RACE:
+        if searchType == TYPE_RACE or searchType==4:
             for race in self.races:
                 if search in race:
                     items.append(self.mydoc.getElementsByTagName("race"))
                     break
-        elif searchType == TYPE_CLASS:
+        if searchType == TYPE_CLASS or searchType==4:
             for cclass in self.classes:
                 if search in cclass:
                     items.append(self.mydoc.getElementsByTagName("class"))
                     break
-        elif searchType == TYPE_BG:
+        if searchType == TYPE_BG or searchType==4:
             for background in self.backgrounds:
                 if search in background:
                     items.append(self.mydoc.getElementsByTagName("background"))
@@ -359,6 +407,9 @@ class generator():
         
         
     # TODO: USER INTERFACE
+    # TODO: ADD CLASSS EQUIPMENT
+    # TODO: ADD TRINKET
+    # TODO: SAVE CHARACTERS
     # race should be a valid race
     # cclass should be a valid class
     # bg should be a valid background
