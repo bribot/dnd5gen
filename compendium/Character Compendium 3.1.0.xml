@@ -183,6 +183,7 @@
 		<hd>8</hd>
 		<proficiency>Intelligence, Constitution</proficiency>
 		<spellAbility>Intelligence</spellAbility>
+		<quickbuild>Intelligence,Constitution or Dexterity</quickbuild>
 		<autolevel level="1"> <slots>0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="2"> <slots>0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="3"> <slots>0,2,0,0,0,0</slots></autolevel>
@@ -610,7 +611,7 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 		<name>Barbarian</name>
 		<hd>12</hd>
 		<proficiency>Strength, Constitution</proficiency>
-
+		<quickbuild>Strength,Constitution</quickbuild>
 		<autolevel level="1">
 			<feature>
 				<name>Starting Proficiencies</name>
@@ -1069,6 +1070,7 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 		<hd>8</hd>
 		<proficiency>Dexterity, Charisma</proficiency>
 		<spellAbility>Charisma</spellAbility>
+		<quickbuild>Charisma, Dexterity</quickbuild>
 		<autolevel level="1"> <slots>2,2,0,0,0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="2"> <slots>2,3,0,0,0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="3"> <slots>2,4,2,0,0,0,0,0,0,0</slots></autolevel>
@@ -1720,6 +1722,7 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 		<hd>8</hd>
 		<proficiency>Wisdom, Charisma</proficiency>
 		<spellAbility>Wisdom</spellAbility>
+		<quickbuild>Wisdom,Constitution or Strength</quickbuild>
 		<autolevel level="1"> <slots>3,2,0,0,0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="2"> <slots>3,3,0,0,0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="3"> <slots>3,4,2,0,0,0,0,0,0,0</slots></autolevel>
@@ -2858,6 +2861,7 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 		<hd>8</hd>
 		<proficiency>Intelligence, Wisdom</proficiency>
 		<spellAbility>Wisdom</spellAbility>
+		<quickbuild>Wisdom,Constitution</quickbuild>
 		<autolevel level="1"> <slots>2,2,0,0,0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="2"> <slots>2,3,0,0,0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="3"> <slots>2,4,2,0,0,0,0,0,0,0</slots></autolevel>
@@ -3665,8 +3669,8 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 		<name>Fighter</name>
 		<hd>10</hd>
 		<proficiency>Strength, Constitution</proficiency>
-
 		<spellAbility>Intelligence</spellAbility>
+		<quickbuild>Strenght or Dexterity,Constitution or Intelligence</quickbuild>
 		<autolevel level="3"> <slots optional="YES">2,2,0,0,0</slots></autolevel>
 		<autolevel level="4"> <slots optional="YES">2,3,0,0,0</slots></autolevel>
 		<autolevel level="5"> <slots optional="YES">2,3,0,0,0</slots></autolevel>
@@ -5885,6 +5889,7 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 		<hd>8</hd>
 		<proficiency>Strength, Dexterity</proficiency>
 		<spellAbility>Wisdom</spellAbility>
+		<quickbuild>Dexterity,Wisdom</quickbuild>
 		<autolevel level="1">
 			<feature>
 				<name>Starting Proficiencies</name>
@@ -6387,6 +6392,7 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 <hd>8</hd>
 <proficiency>Intelligence, Wisdom</proficiency>
 <spellAbility>Intelligence</spellAbility>
+<quickbuild>Intelligence,Constitution or Dexterity</quickbuild>
 <autolevel level="1"> <slots>1,2,4,2,0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="2"> <slots>1,3,6,2,0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="3"> <slots>2,3,14,3,0,0,0,0,0,0</slots></autolevel>
@@ -6719,6 +6725,7 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 		<hd>10</hd>
 		<proficiency>Wisdom, Charisma</proficiency>
 		<spellAbility>Charisma</spellAbility>
+		<quickbuild>Strength,Charisma</quickbuild>
 		<autolevel level="1"> <slots>0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="2"> <slots>0,2,0,0,0,0</slots></autolevel>
 		<autolevel level="3"> <slots>0,3,0,0,0,0</slots></autolevel>
@@ -7439,6 +7446,7 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 		<hd>10</hd>
 		<proficiency>Strength, Dexterity</proficiency>
 		<spellAbility>Wisdom</spellAbility>
+		<quickbuild>Dexterity,Wisdom</quickbuild>
 		<autolevel level="1"> <slots>0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="2"> <slots>0,2,0,0,0,0</slots></autolevel>
 		<autolevel level="3"> <slots>0,3,0,0,0,0</slots></autolevel>
@@ -7910,6 +7918,7 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 <hd>10</hd>
 <proficiency>Strength, Dexterity</proficiency>
 <spellAbility>Wisdom</spellAbility>
+<quickbuild>Dexterity,Wisdom</quickbuild>
 		<autolevel level="1"> <slots>0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="2"> <slots>0,2,0,0,0,0</slots></autolevel>
 		<autolevel level="3"> <slots>0,3,0,0,0,0</slots></autolevel>
@@ -8445,8 +8454,8 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 		<name>Rogue</name>
 		<hd>8</hd>
 		<proficiency>Dexterity, Intelligence</proficiency>
-
 		<spellAbility>Intelligence</spellAbility>
+		<quickbuild>Dexterity, Intelligence</quickbuild>
 		<autolevel level="3"> <slots optional="YES">3,2,0,0,0</slots></autolevel>
 		<autolevel level="4"> <slots optional="YES">3,3,0,0,0</slots></autolevel>
 		<autolevel level="5"> <slots optional="YES">3,3,0,0,0</slots></autolevel>
@@ -9140,6 +9149,7 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 		<hd>6</hd>
 		<proficiency>Constitution, Charisma</proficiency>
 		<spellAbility>Charisma</spellAbility>
+		<quickbuild>Charisma,Constitution</quickbuild>
 		<autolevel level="1"> <slots>4,2,0,0,0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="2"> <slots>4,3,0,0,0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="3"> <slots>4,4,2,0,0,0,0,0,0,0</slots></autolevel>
@@ -10149,6 +10159,7 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 		<hd>8</hd>
 		<proficiency>Wisdom, Charisma</proficiency>
 		<spellAbility>Charisma</spellAbility>
+		<quickbuild>Charisma,Constitution</quickbuild>
 		<autolevel level="1"> <slots>2,1,0,0,0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="2"> <slots>2,2,0,0,0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="3"> <slots>2,0,2,0,0,0,0,0,0,0</slots></autolevel>
@@ -11629,6 +11640,7 @@ If an Alchemical Formula option requires a saving throw, the DC is 8 + your prof
 		<hd>6</hd>
 		<proficiency>Intelligence, Wisdom</proficiency>
 		<spellAbility>Intelligence</spellAbility>
+		<quickbuild>Intelligence,Constitution or Dexterity</quickbuild>
 		<autolevel level="1"> <slots>3,2,0,0,0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="2"> <slots>3,3,0,0,0,0,0,0,0,0</slots></autolevel>
 		<autolevel level="3"> <slots>3,4,2,0,0,0,0,0,0,0</slots></autolevel>

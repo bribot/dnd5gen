@@ -9,10 +9,14 @@ from xml.dom import minidom
 #from random import randint
 import random
 import math
+from string import punctuation
 
 TYPE_RACE = 0
 TYPE_CLASS = 1
 TYPE_BG = 2
+#
+#import charGen as gen
+#vat = gen.generator()
 
 def testScript():
     vat = generator()
@@ -20,26 +24,33 @@ def testScript():
         for c in vat.classes:
             for b in vat.backgrounds:
                 vat.generate(race=r,cclass=c,bg=b)
-                
-def interface(search):
-    r = ""
-    c = ""
-    b = ""
+def testClasses():
     vat = generator()
-    for s in search.split(","):
-        ty = vat.getType(s)
-        if ty == 0:
-            r = s
-        elif ty == 1:
-            c = s
-        elif ty == 2:
-            b = s
-        else:
-            print("Something went wrong")
-    res = vat.generate(race=r,cclass=c,bg=b)
-    
-    print(res)
-    return 
+    for r in vat.classes:
+        c=vat.listInfo(r)[0]
+        c=vat.getClass(c)
+        print("--------------------")
+        print(c["name"])
+        print(c["proficiency"])
+        print(c["quickbuild"])
+def testType():
+    vat=generator()
+    for r in vat.races:
+        t = vat.getType(r)
+        if t !=0:
+            print("error in %s" % r)
+            return 
+    for r in vat.classes:
+        t = vat.getType(r)
+        if t !=1:
+            print("error in %s" % r)
+            return 
+    for r in vat.backgrounds:
+        t = vat.getType(r)
+        if t !=2:
+            print("error in %s" % r)
+            return 
+    print("ALL DONE!")
     
 
 class generator():
@@ -99,15 +110,56 @@ class generator():
             else:
                 print(name + " banned!")
     
-    # ---------------------------------------------------
-    # TODO: EITHER DELETE OR MAKE IT RIGHT
-#    def genCharacter(self,race="",cclass="",lvl=1):
-#        if race=="":
-#            race=self.races[randint(0,len(self.races)-1)]
-#        if cclass=="":
-#            cclass=self.classes[randint(0,len(self.classes)-1)]
-#        print("Behold the %s %s!" % (race,cclass))
-    # ---------------------------------------------------
+    def interface(self,search):
+        """
+        Returns: Str, code
+        code:
+            0 = random option
+            1 = everything is right
+            2 = more than one option
+            3 = no options
+        """
+        r = ""
+        c = ""
+        b = ""
+        if len(search)>0:
+            for s in search.split(","):
+                if s[0]==" ":
+                    s=s[1:]
+                    
+                code=000
+                ty = self.getType(s)
+                if ty == 0:
+                    r = s
+                    code+=1
+                elif ty == 1:
+                    c = s
+                    code+=10
+                elif ty == 2:
+                    b = s
+                    code+=100
+                elif ty ==10:
+                    info=self.listInfo(s,0)
+                    r=info[random.randint(0,len(info)-1)]
+                    code+=2
+                elif ty ==11:
+                    info=self.listInfo(s,1)
+                    c=info[random.randint(0,len(info)-1)]
+                    code+=20
+                elif ty ==12:
+                    info=self.listInfo(s,2)
+                    b=info[random.randint(0,len(info)-1)]
+                    code+=200
+                else:
+                    print("Something went wrong")
+                    return "error"
+                
+#                code=333
+        #print("r: %s, c: %s, b: %s" % (r,c,b))
+        res = self.generate(race=r,cclass=c,bg=b)
+        
+#        print(res)
+        return res
     
     def getType(self,search):
         """    
@@ -126,15 +178,18 @@ class generator():
         elif search in self.backgrounds:
             ty = 2
         else:
-            for i in self.races:
-                if search == i:
-                    return 0
-            for i in self.classes:
-                if search == i:
-                    return 1
-            for i in self.backgrounds:
-                if search == i:
-                    return 2
+            search=self.listInfo(search)
+            if len(search)==0:
+                return 4
+            search = search[0].lower()
+#            print(search)
+            if search in self.races:
+#                print("hey")
+                ty = 10
+            elif search in self.classes:
+                ty = 11
+            elif search in self.backgrounds:
+                ty = 12
         return ty
         
     def getRace(self,race):
@@ -171,6 +226,7 @@ class generator():
         result={"name":cclass,
                 "hd":"",
                 "proficiency":"",
+                "quickbuild":"",
                 "spellAbility":""}
         if cclass=="":
             print("no valid class")
@@ -192,6 +248,9 @@ class generator():
             result["spellAbility"]=item.firstChild.data
         except:
             result["spellAbility"]=""
+            
+        item=node.getElementsByTagName("quickbuild")[0]
+        result["quickbuild"]=item.firstChild.data
             
         item=node.getElementsByTagName("trait")
         for i in item:
@@ -294,16 +353,18 @@ class generator():
         
         for itemS in items:
             for item in itemS:
-#                print("......................")
-#                print(item)
                 name=item.getElementsByTagName("name")[0].firstChild.data
                 namel=name.lower()
                 if search in namel:
-                    result.append(name)
+                    if namel[namel.find(search)-1] in punctuation+" " or namel == search or namel.find(search) == 0:
+#                        print("hey")
+#                        print(race[race.find(search)-1])
+                        result.append(name)
                     #print(name)
         return result
         
     # TODO: OPTIONS TO ROLL
+    # TODO: REROLL ON LOW STATS
     def genStats(self,diceS=6,diceR=4,diceK=3):
         stats=[]
         rolls=[]
@@ -322,11 +383,12 @@ class generator():
             stats.append(stat)
             
         return stats,rolls
-    
+    # TODO: Usequickbuild instead of proficiency 
     def sortStats(self,stats,cclass):
         proficiency=[]
         bestStats=[]
         pStats = self.pStats
+        
         for p in cclass["proficiency"].split():
             proficiency.append(p[0:3].lower())
         stats.sort()
@@ -407,6 +469,7 @@ class generator():
         
         
     # TODO: USER INTERFACE
+    # TODO: STAT PREFERENCE
     # TODO: ADD CLASSS EQUIPMENT
     # TODO: ADD TRINKET
     # TODO: SAVE CHARACTERS
@@ -414,10 +477,12 @@ class generator():
     # cclass should be a valid class
     # bg should be a valid background
     def generate(self,race="",cclass="",bg="",lvl=1):
-#        print("-----GENERATING-----")
         result="-----GENERATING-----"
         if race.lower()  in self.races:
-            race = self.listInfo(race,TYPE_RACE)[0]
+            raceT = self.listInfo(race,TYPE_RACE)
+            for r in raceT:
+                if r.lower() == race.lower():
+                    race = r
         elif race == "":
             race = self.races[random.randint(0,len(self.races)-1)]
             race = self.listInfo(race,TYPE_RACE)[0]
@@ -427,7 +492,10 @@ class generator():
             return "Not a valid race"
             
         if cclass.lower() in self.classes:
-            cclass = self.listInfo(cclass,TYPE_CLASS)[0]
+            cclassT = self.listInfo(cclass,TYPE_CLASS)
+            for c in cclassT:
+                if c.lower().startswith(cclass.lower()):
+                    cclass = c
         elif cclass == "":
             cclass = self.classes[random.randint(0,len(self.classes)-1)]
             cclass = self.listInfo(cclass,TYPE_CLASS)[0]
@@ -437,7 +505,10 @@ class generator():
             return "Not a valid class"
             
         if bg.lower() in self.backgrounds:
-            bg = self.listInfo(bg,TYPE_BG)[0]
+            bgT = self.listInfo(bg,TYPE_BG)
+            for b in bgT:
+                if b.lower().startswith(bg.lower()):
+                    bg = b
         elif bg == "":
             bg = self.backgrounds[random.randint(0,len(self.backgrounds)-1)]
             bg = self.listInfo(bg,TYPE_BG)[0]
@@ -461,11 +532,12 @@ class generator():
         pSpeed = pRace["speed"]
 #        print("--------------------------")
         result+="\n"+race+" "+cclass+" "+bg
-
+        #-------------------------------------------
+#       UNCOMMENT BEFORE RELEASE
         for s in pStats:
             result+=("\n"+s + ":"+ str(pStats[s][0])+"("+str(pStats[s][-1])+ ")")
             
-        result+=("Racial: " + pRace["ability"])
+        result+=("\nRacial: " + pRace["ability"])
         result+=("\n"+"HP: "+str(pHP))
         result+=("\n"+"Proficiency: "+str(pProficiency))
         result+=("\n"+pClass["proficiency"])
@@ -473,30 +545,8 @@ class generator():
         result+=("\n"+"Spellcasting Ability: "+str(pClass["spellAbility"]))
         result+=("\n"+"DC: "+str(pDC))
         result+=("\n"+"Speed: "+str(pSpeed))
-#        print("Languages:")
-#        try:
-#            print("*"+pRace["Languages"])
-#        except:
-#            print("")
-#        try:
-#            print("*"+pBg["Languages"])
-#        except:
-#            print("")
         result+=("\n"+"Equipment: "+pBg["Equipment"])
-        
-        
-#        print("Rolls: ")
-#        for r in opStats[1]:
-#            print(str(r))
-        #-------------------------
-#        print(pClass)
-#        print(pRace)
-#        print(pBg)
-        #-------------------------
-#        print("---------------------------")
-#        for i in pClass:
-#            print(i)
-#        print("---------------------------")
+        #------------------------------------------------------------------
         return result
         
         
