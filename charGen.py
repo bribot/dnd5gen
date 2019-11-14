@@ -255,7 +255,14 @@ class generator():
         item=node.getElementsByTagName("trait")
         for i in item:
             result[i.getElementsByTagName("name")[0].firstChild.data]=i.getElementsByTagName("text")[0].firstChild.data
-        
+      #-------------------------------------------------      
+        item=node.getElementsByTagName("autolevel")
+        for i in item:
+            if i.getAttribute("level")=="1":
+                t = i.getElementsByTagName("feature")
+                for i in t:
+            u=i.getElementsByTagName("name")
+        #-------------------------------------------------
         return result
     
     def getBackground(self,bg):
@@ -383,19 +390,34 @@ class generator():
             stats.append(stat)
             
         return stats,rolls
-    # TODO: Usequickbuild instead of proficiency 
+    
+    # TODO: use remaining stats
     def sortStats(self,stats,cclass):
         proficiency=[]
         bestStats=[]
+#        otherStats=[]
         pStats = self.pStats
         
-        for p in cclass["proficiency"].split():
+        for p in cclass["quickbuild"].split(","):
+#            print("-------------")
+#            print(p)
+#            print("-------------")
+            if len(p.split("or"))>1:
+                p=p.split("or")[random.randint(0,len(p.split("or"))-1)]
+#                print("-------------")
+#                print(p)
+#                print("-------------")
+            if p[0]==" ":
+                p=p[1:]
             proficiency.append(p[0:3].lower())
+#        print(proficiency)
         stats.sort()
+#        print(stats)
         for p in proficiency:
             bestStats.append(stats.pop(-1))
+#            print(bestStats)
             
-        random.shuffle(bestStats)
+#        random.shuffle(bestStats)
         random.shuffle(stats)
         
         for stat in pStats:
@@ -468,8 +490,6 @@ class generator():
         return pDC
         
         
-    # TODO: USER INTERFACE
-    # TODO: STAT PREFERENCE
     # TODO: ADD CLASSS EQUIPMENT
     # TODO: ADD TRINKET
     # TODO: SAVE CHARACTERS
@@ -545,7 +565,7 @@ class generator():
         result+=("\n"+"Spellcasting Ability: "+str(pClass["spellAbility"]))
         result+=("\n"+"DC: "+str(pDC))
         result+=("\n"+"Speed: "+str(pSpeed))
-        result+=("\n"+"Equipment: "+pBg["Equipment"])
+        result+=("\n"+"Equipment: \nBy Background:"+pBg["Equipment"])
         #------------------------------------------------------------------
         return result
         
