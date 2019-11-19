@@ -227,7 +227,8 @@ class generator():
                 "hd":"",
                 "proficiency":"",
                 "quickbuild":"",
-                "spellAbility":""}
+                "spellAbility":"",
+                "startingEquipment":""}
         if cclass=="":
             print("no valid class")
             return result
@@ -256,13 +257,13 @@ class generator():
         for i in item:
             result[i.getElementsByTagName("name")[0].firstChild.data]=i.getElementsByTagName("text")[0].firstChild.data
       #-------------------------------------------------      
-        item=node.getElementsByTagName("autolevel")
+        item=node.getElementsByTagName("feature")
         for i in item:
-            if i.getAttribute("level")=="1":
-                t = i.getElementsByTagName("feature")
-                for i in t:
-            u=i.getElementsByTagName("name")
-        #-------------------------------------------------
+            for n in i.childNodes:
+                if n.nodeType==1:
+                    if n.tagName == "name" and n.firstChild.data == "Starting Equipment":
+                        result["startingEquipment"]=self.findTextNodes(i.childNodes)
+    #-------------------------------------------------
         return result
     
     def getBackground(self,bg):
@@ -292,17 +293,23 @@ class generator():
         return result
     
     def findTextNodes(self,nodeList):
+        result=""
         noprint=["text","name"]
         for subnode in nodeList:
             if subnode.nodeType == subnode.ELEMENT_NODE:
                 if subnode.tagName not in noprint:
                     print(subnode.tagName)
                 # call function again to get children
-                self.findTextNodes(subnode.childNodes)
+                result+=self.findTextNodes(subnode.childNodes)+"\n"
             elif subnode.nodeType == subnode.TEXT_NODE:
                 if("\t" not in subnode.data):
                     #print("text node: ")
-                    print(subnode.data)
+#                    print(subnode.data)
+                    result+=subnode.data
+#        print(result)
+        return result
+                    
+                    
                     
     #TODO: RETURN INFO AS A STR 
     def searchInfo(self,search):
@@ -330,7 +337,7 @@ class generator():
             name=name.lower()
             if name.startswith(search):
                 print("----------------------------------")
-                self.findTextNodes(item.childNodes)
+                print(self.findTextNodes(item.childNodes))
         return
     
     def listInfo(self,search,searchType=4):
@@ -565,7 +572,8 @@ class generator():
         result+=("\n"+"Spellcasting Ability: "+str(pClass["spellAbility"]))
         result+=("\n"+"DC: "+str(pDC))
         result+=("\n"+"Speed: "+str(pSpeed))
-        result+=("\n"+"Equipment: \nBy Background:"+pBg["Equipment"])
+        result+=("\n"+"Class Equipment:"+"\n"+pClass["startingEquipment"]+"\n"
+                 +"\nBackground Equipment:\n"+pBg["Equipment"])
         #------------------------------------------------------------------
         return result
         
