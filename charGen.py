@@ -109,7 +109,8 @@ class generator():
                 self.backgrounds.append(name)
             else:
                 print(name + " banned!")
-    
+                
+    # TODO: ADVANCED INTERFACE
     def interface(self,search):
         """
         Returns: Str, code
@@ -140,20 +141,20 @@ class generator():
                     code+=100
                 elif ty ==10:
                     info=self.listInfo(s,0)
-                    r=info[random.randint(0,len(info)-1)]
+                    r=info[0]
                     code+=2
                 elif ty ==11:
                     info=self.listInfo(s,1)
-                    c=info[random.randint(0,len(info)-1)]
+                    c=info[0]
                     code+=20
                 elif ty ==12:
                     info=self.listInfo(s,2)
-                    b=info[random.randint(0,len(info)-1)]
+                    b=info[0]
                     code+=200
                 else:
                     print("Something went wrong")
                     return "error"
-                
+                print(ty)
 #                code=333
         #print("r: %s, c: %s, b: %s" % (r,c,b))
         res = self.generate(race=r,cclass=c,bg=b)
@@ -514,9 +515,9 @@ class generator():
         return pDC
         
         
-    # TODO: ADD CLASSS EQUIPMENT
     # TODO: ADD TRINKET
     # TODO: SAVE CHARACTERS
+    # TODO: OPTIONS INTERFACE
     # race should be a valid race
     # cclass should be a valid class
     # bg should be a valid background
@@ -526,6 +527,7 @@ class generator():
             raceT = self.listInfo(race,TYPE_RACE)
             for r in raceT:
                 if r.lower() == race.lower():
+#                    print(r.lower()+" es " +race.lower())
                     race = r
         elif race == "":
             race = self.races[random.randint(0,len(self.races)-1)]
@@ -578,19 +580,19 @@ class generator():
         result+="\n"+race+" "+cclass+" "+bg
         #-------------------------------------------
 #       UNCOMMENT BEFORE RELEASE
-        for s in pStats:
-            result+=("\n"+s + ":"+ str(pStats[s][0])+"("+str(pStats[s][-1])+ ")")
-            
-        result+=("\nRacial: " + pRace["ability"])
-        result+=("\n"+"HP: "+str(pHP))
-        result+=("\n"+"Proficiency: "+str(pProficiency))
-        result+=("\n"+pClass["proficiency"])
-        result+=("\n"+pBg["proficiency"])
-        result+=("\n"+"Spellcasting Ability: "+str(pClass["spellAbility"]))
-        result+=("\n"+"DC: "+str(pDC))
-        result+=("\n"+"Speed: "+str(pSpeed))
-        result+=("\n"+"Class Equipment:"+"\n"+pClass["startingEquipment"]+"\n"
-                 +"\nBackground Equipment:\n"+pBg["Equipment"])
+#        for s in pStats:
+#            result+=("\n"+s + ":"+ str(pStats[s][0])+"("+str(pStats[s][-1])+ ")")
+#            
+#        result+=("\nRacial: " + pRace["ability"])
+#        result+=("\n"+"HP: "+str(pHP))
+#        result+=("\n"+"Proficiency: "+str(pProficiency))
+#        result+=("\n"+pClass["proficiency"])
+#        result+=("\n"+pBg["proficiency"])
+#        result+=("\n"+"Spellcasting Ability: "+str(pClass["spellAbility"]))
+#        result+=("\n"+"DC: "+str(pDC))
+#        result+=("\n"+"Speed: "+str(pSpeed))
+#        result+=("\n"+"Class Equipment:"+"\n"+pClass["startingEquipment"]+"\n"
+#                 +"\nBackground Equipment:\n"+pBg["Equipment"])
         #------------------------------------------------------------------
         return result
         
