@@ -71,12 +71,12 @@ class generator():
         self.pDC=0
         self.pSpeed=0
         self.pStats={
-                "STR":"",
-                "DEX":"",
-                "CON":"",
-                "INT":"",
-                "WIS":"",
-                "CHA":""
+                "STR":[],
+                "DEX":[],
+                "CON":[],
+                "INT":[],
+                "WIS":[],
+                "CHA":[]
                 }
         #--------------------------
         items = self.mydoc.getElementsByTagName('race')
@@ -370,16 +370,14 @@ class generator():
                 name=item.getElementsByTagName("name")[0].firstChild.data
                 namel=name.lower()
                 if search in namel:
-                    if namel[namel.find(search)-1] in punctuation+" " or namel == search or namel.find(search) == 0:
-#                        print("hey")
-#                        print(race[race.find(search)-1])
+
                         result.append(name)
                     #print(name)
         return result
         
     # TODO: OPTIONS TO ROLL
     # TODO: REROLL ON LOW STATS
-    def genStats(self,diceS=6,diceR=4,diceK=3):
+    def genStats(self,diceS=6,diceR=4,diceK=3,easyMode=1):
         stats=[]
         rolls=[]
         for i in range(len(self.pStats)):
@@ -391,9 +389,9 @@ class generator():
             rolls.append(roll)
             
             stat = sum(roll[0:diceK])
-            
-    #        for j in range(diceK):
-    #            stat+=roll[j]
+            if stat<7 and easyMode==1:
+                # Is this easy mode? ÒwÓ
+                stat=7
             stats.append(stat)
             
         return stats,rolls
@@ -402,40 +400,59 @@ class generator():
     def sortStats(self,stats,cclass):
         proficiency=[]
         bestStats=[]
-#        otherStats=[]
+        otherStats=[]
         pStats = self.pStats
         
         for p in cclass["quickbuild"].split(","):
-#            print("-------------")
+#            print("-------quick------")
 #            print(p)
 #            print("-------------")
             if len(p.split("or"))>1:
-                p=p.split("or")[random.randint(0,len(p.split("or"))-1)]
-#                print("-------------")
+                pTemp = p.split("or")
+                p=pTemp.pop(random.randint(0,len(p.split("or"))-1))
+#                print("-------p&pTemp------")
 #                print(p)
+#                print(pTemp)
 #                print("-------------")
+                for i in pTemp:
+                    if i[0]==" ":
+                        i=i[1:]
+                    otherStats.append(i[0:3].lower())       
             if p[0]==" ":
                 p=p[1:]
             proficiency.append(p[0:3].lower())
+        for o in otherStats:
+            proficiency.append(o)
+#        print("-------prof & other------")
 #        print(proficiency)
-        stats.sort()
+#        print("-------------")
+
+        stats.sort(reverse=1)
+#        print("--------------------------")
 #        print(stats)
+#        print("--------------------------")
         for p in proficiency:
-            bestStats.append(stats.pop(-1))
-#            print(bestStats)
-            
-#        random.shuffle(bestStats)
+            bestStats.append(stats.pop(0))
+
         random.shuffle(stats)
+#        print("--------------------------")
+#        print(bestStats)
+#        print(stats)
+#        print("--------------------------")
         
-        for stat in pStats:
-            #print(stat)
-            if stat.lower() in proficiency:
-                #print("*")
-                pStats[stat]=bestStats.pop(-1)
-            else:
-                pStats[stat]=stats.pop(-1)
-        for stat in pStats:
-            pStats[stat] = [pStats[stat]]
+        for s in pStats:
+            pStats[s]=[]
+        
+        for p in proficiency:
+            pStats[p.upper()].append(bestStats.pop(0))
+        
+        for s in pStats:
+            if pStats[s]==[]:
+                pStats[s].append(stats.pop())
+#        print("--------------------------")
+#        print(pStats)
+#        print("--------------------------")
+#        
         return pStats
     
     def getMods(self,pStats):
@@ -599,12 +616,12 @@ class character():
         self.pSpeed=0
         self.Equipment=""
         self.pStats={
-                "STR":"",
-                "DEX":"",
-                "CON":"",
-                "INT":"",
-                "WIS":"",
-                "CHA":""
+                "STR":[],
+                "DEX":[],
+                "CON":[],
+                "INT":[],
+                "WIS":[],
+                "CHA":[]
                 }
 
 #def bannedChar():
